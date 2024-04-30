@@ -1,0 +1,67 @@
+<!-- /templates/my-form.html-->
+
+<html>
+    <head>
+        <title>Progeny Report</title>
+    </head>
+    <body style="background-color: #d9eaae;text-align: center;">
+	    <h3>Goat Database</h3>
+
+        <!-- Search for goat to display progeny report-->
+	    <h4>Search for a specific goat<br>Example: 15091</h4>
+        Find a specific goat using their tag
+        <input type="text" id="progeny_id"> <br>
+        <button onclick="redirect_progeny()" class="button">Submit</button>
+
+        <!-- Search for goat to display family tree -->
+        <h4>Display a family tree for a goat<br>Example: 15091</h4>
+        <input type="text" id="tree_id"> <br>
+        <button onclick="redirect_tree()" class="button">Submit</button>
+    </body>
+    <script>
+        // link user to the family tree of the goat whose tag they entered
+        function redirect_tree(){
+            var tree_id = document.getElementById('tree_id').value;
+            window.location.href = '/familytree-handler/' + tree_id;
+        }
+        // link user to the progeny report of the goat whose tag they entered
+        function redirect_progeny(){
+            var progeny_id = document.getElementById('progeny_id').value;
+            window.location.href = '/progeny-handler/' + progeny_id;
+        }
+    </script>
+
+
+    <style>
+        form {
+            margin: 1%;
+        
+        }
+        div {
+            margin: 1% 0;
+            color: #493131;
+            font-size: 19px;
+
+        }
+        h3 {
+            text-align: center;
+            color: #457363;
+            font-size: 29px;
+        }
+        h4 {
+            color: #493131;
+            font-size: 20px;
+        }
+        .button {
+            background-color: #493131;
+            border: none;
+            color:white;
+            padding: 10px 25px;
+            text-align: center;
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+    </style>
+</html>

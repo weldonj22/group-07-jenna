@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goat Family Tree</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .family-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .generation {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .node {
+            text-align: center;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            min-width: 120px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .connector {
+            border-bottom: 2px solid #333;
+            flex-grow: 1;
+            height: 0;
+            margin: 10px;
+        }
+        .progeny-report {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Goat Family Tree</h1>
+        <div class="family-tree">
+            <div class="generation">
+                <div class="node" onclick="goToProgenyReport('EID 1234, Tag 123')">Chosen Goat</div>
+            </div>
+            <div class="generation">
+                <div class="node" onclick="goToProgenyReport('EID 12346')">Kid 1 of Chosen Goat</div>
+                <div class="connector"></div>
+                <div class="node" onclick="goToProgenyReport('EID 12347')">EID 12347</div>
+            </div>
+            <div class="generation">
+                <div class="node" onclick="goToProgenyReport('EID 12348')">EID 12348</div>
+                <div class="connector"></div>
+                <div class="node" onclick="goToProgenyReport('EID 12349')">EID 12349</div>
+                
+            </div>
+            <div class="generation">
+                <div class="node" onclick="goToProgenyReport('EID 12350')">EID 12</div>
+                <div class="connector"></div>
+                <div class="node" onclick="goToProgenyReport('EID 12351')">EID 12351</div>
+            </div>
+            <div class="generation">
+                <div class="node" onclick="goToProgenyReport('EID 12352')">EID 12352</div>
+                <div class="connector"></div>
+                <div class="node" onclick="goToProgenyReport('EID 12353')">EID 12353</div>
+            </div>
+        </div>
+        <div class="progeny-report">Click on a goat to see progeny report</div>
+    </div>
+    <script>
+        function goToProgenyReport(goatName) {
+            alert("Progeny report for " + goatName);
+            // Redirect to another page with progeny report
+            //For when jenna finishes prog reports for goats.
+            // window.location.href = "progeny-report-page.html?goat=" + goatName;
+        }
+    </script>
+</body>
+</html>

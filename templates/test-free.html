@@ -1,0 +1,161 @@
+
+
+<html>
+    <head>
+        <title>Flask result table using nested for loops</title>
+    </head>
+
+    
+    <style type="text/css">
+
+    th:tr{
+        color: blue;
+    }
+    tr:nth-of-type(2n){
+        border: 1px solid black;
+        background-color: rgba(150, 150, 150, 0.5);
+    }
+    td{
+        padding: 8px 8px;
+        border: 1px solid black;
+    }
+    #container {
+        text-align: center;
+    }
+    #goat-container {
+        display: inline-block;
+        margin-inline: 50px;
+        text-align: justify;
+        border: 1px solid black;
+        margin: 100px;
+        width: 200px;
+        background-color: white;
+    }
+    .goat-container-top {
+        display: flex;
+    }
+    .goat-container-bottom {
+        display: flex;
+    }
+    .goat-id {
+        border: 1px solid black;
+        padding: 3px;
+        width: 115px;
+        text-align: center;
+    }
+    .goat-data {
+        border: 1px solid black;
+        padding: 3px;
+        width: 115px;
+        text-align: center;
+    }
+    .button {
+        background-color: #493131;
+        border: none;
+        color:white;
+        padding: 10px 25px;
+        text-align: center;
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+    }
+    </style>
+     <!-- Scripts for handling buttons that take user to other pages -->
+    <script>
+        // send user to family tree with goat (id) at center
+        function redirect_tree(id){
+            window.location.href = '/familytree-handler/' + id
+        }
+        // send user to progeny report for goat (id)
+        function redirect_progeny(id){
+            window.location.href = '/progeny-handler/' + id
+        }
+        // send user to home page
+        function redirect_home(){
+            window.location.href = '/';
+        }
+    </script>
+
+<body  style="background-color: #d9eaae;">   
+    <div style="text-align: center;">
+        <button onclick="redirect_home()" class="button">Home</button>
+    </div>
+    <!-- Display Parents -->
+    <h1> Parents </h1>
+    <div id="container">
+        {% if parents %} <!-- if the goat has at least one known parent -->
+            {% for parent in parents %} <!-- create a node for each parent -->
+                <div id="goat-container">
+                    <div id="goat-container-top">
+                        <!-- Display ID and link to goat's progeny report -->
+                        <div class="goat-id" style="display: inline-block;">{{parent[0]}}</div>
+                        <button onclick="redirect_progeny('{{ parent[0] }}')" style="display: inline-block;">Report</button>
+                    </div>
+                    <div id="goat-container-bottom">
+                        <!-- Display data (such as parent type) and link to family tree centered on this goat -->
+                        <!-- Change the color of the data text depending on whether the parent is female, or not (assumed to be male, hermaphrodite not handled) -->
+                        {% if parent[1] == 'Dam' %}
+                        <div class="goat-data" style="color: rgb(214, 102, 121);display: inline-block;">{{parent[1]}}</div>
+                        {% else %}
+                        <div class="goat-data" style="color: blue;display: inline-block;">{{parent[1]}}</div>
+                        {% endif %}
+                        <button onclick="redirect_tree('{{ parent[0] }}')" style="display: inline-block;">Tree</button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <hr>
+</body>
+    <body>
+        <!-- Display a node for the current (or center) goat, the goat whose parents and kids are being displayed -->
+        <h1> Current </h1>
+        <div id="container">
+            <div id="goat-container">
+                <div id="goat-container-top">
+                    <!-- Display ID and link to goat's progeny report -->
+                    <div class="goat-id" style="display: inline-block;">{{current_goat[0]}}</div>
+                    <button onclick="redirect_progeny('{{ current_goat[0] }}')" style="display: inline-block;">Report</button>
+                </div>
+                <div id="goat-container-bottom">
+                    <!-- Display data (such as sex) and link to family tree centered on this goat -->
+                    <!-- Change the color of the data text depending on whether this goat is female, or not (assumed to be male, hermaphrodite not handled) -->
+                    {% if current_goat[1] == 'Female' %}
+                    <div class="goat-data" style="color: rgb(214, 102, 121);">{{current_goat[1]}}</div>
+                    {% else %}
+                    <div class="goat-data" style="color: blue;">{{current_goat[1]}}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <hr>
+    </body>
+
+    <body>
+        <!-- Display Kids -->
+        <h1> Kids </h1>
+        <div id="container">
+            {% if kids %} <!-- if this goat has at least one kid -->
+                {% for kid in kids %} <!-- create a node for each kid -->
+                    <div id="goat-container">
+                        <div id="goat-container-top">
+                            <!-- Display ID and link to goat's progeny report -->
+                            <div class="goat-id"  style="display: inline-block;">{{kid[0]}}</div>
+                            <button onclick="redirect_progeny('{{ kid[0] }}')" style="display: inline-block;">Report</button>
+                        </div>
+                        <div id="goat-container-bottom">
+                            <!-- Display data (such as sex) and link to family tree centered on this goat -->
+                            <!-- Change the color of the data text depending on whether the kid is female, or not (assumed to be male, hermaphrodite not handled) -->
+                            {% if kid[1] == 'Female' %}
+                            <div class="goat-data" style="color: rgb(214, 102, 121);display: inline-block;">{{kid[1]}}</div>
+                            {% else %}
+                            <div class="goat-data" style="color: blue;display: inline-block;">{{kid[1]}}</div>
+                            {% endif %}
+                            <button onclick="redirect_tree('{{ kid[0] }}')" style="display: inline-block;">Tree</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </body>
+</html>

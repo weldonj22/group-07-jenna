@@ -1,0 +1,229 @@
+<html>
+    <head>
+        <title>Flask result table using nested for loops</title>
+    </head>
+
+    <style type="text/css">
+        th:tr{
+            color: blue;
+        }
+        tr:nth-of-type(2n){
+            border: 1px solid black;
+            background-color: rgba(150, 150, 150, 0.5);
+        }
+
+        td{
+            padding: 4px 4px;
+            border: 1px solid black;
+        }
+        div {
+            color: #493131;
+            font-size: 20px;
+        }
+        .stat-table{
+            position: relative;
+        }
+        .stat-table-scroll{
+            border: 1px solid black;
+            max-height: 300px;
+            overflow: auto;
+        }
+        .stat-table table{
+            width: 100%;
+        }
+        .stat-table table thead th .text{
+            position: absolute;
+            top: 40px;
+            z-index: 2;
+            border: 1px;
+        }
+        .kid-counts{
+            margin-bottom: 30px;
+        }
+        .count {
+            display: inline-block;
+            margin-inline: 5px;
+        }
+        .button {
+            background-color: #493131;
+            border: none;
+            color:white;
+            padding: 10px 25px;
+            text-align: center;
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        //Link user to family tree for this goat
+        function redirect_tree(){
+            var tree_id = document.getElementById('tree_id');
+            window.location.href = '/familytree-handler/' + tree_id.innerHTML;
+        }
+        // Link user back to home page
+        function redirect_home(){
+            window.location.href = '/';
+        }
+    </script>
+
+    <body style="background-color: #d9eaae;text-align: center;">
+        <!-- Display link at top of page -->
+        <div>
+            <div style="display: inline-block;margin-inline: 10px;">
+                <button onclick="redirect_home()" class="button">Home</button>
+            </div>  
+            <div style="display: inline-block;margin-inline: 10px;">
+                <button onclick="redirect_tree()" class="button">Family Tree</button>
+            </div>
+        </div>
+        <!-- Searching functionality was removed -->
+        <!-- <div id="goat-search">
+            <form action="/progeny-handler" method="POST">
+                <div>
+                    Enter an ID
+                    <input type="text" name="goat_id">
+                    <input type="submit" value="Submit">
+                </div>
+            </form> 
+        </div> -->
+
+
+        <!--
+            Note:
+                Each section below checks to see if the data it is displaying exists
+                If not, it will not display anything in that space (there will be no indication that its missing)
+        -->
+
+
+        <div>
+            <!-- General Info -->
+            <div id="goat-info"><b>
+                <h2> Information for <span id="tree_id">{{current_goat}}</span> </h2>
+                {% if goat_info %}
+                    <div id="goat-stat">
+                        Status: {{goat_info[0][2]}}  &emsp;  Sex: {{goat_info[0][1]}} &emsp;   Date of Birth: {{goat_info[0][3]}}
+                    </div></b></div>
+                {% else %}
+                    No information available
+                {% endif %}
+            </div>
+            
+            <!-- IDs -->
+            {% if goat_ids %}
+                <div id="goat-ids"><b>
+
+                    <div id="goat-stat">
+                        RFID: {{goat_ids[0][1]}} &emsp;   NLIS: {{goat_ids[0][3]}}
+                    </b></div>
+                </div>
+            {% endif %}
+            
+            <!-- Weights -->
+            {% if goat_weights %}
+                <div class="stat-table">
+                    <h2>Weight</h2>
+                    <div>
+                        <div class="stat-table-scroll">
+                            <table >
+                                <thead>
+                                    <tr>
+                                        <th><span class="text">Type</span></th>
+                                        <th><span class="text">Weight (lbs)</span></th>
+                                        <th><span class="text">Date</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Display each weight record -->
+                                {%for row in goat_weights%}
+                                    <tr>
+                                    {%for col in row%}
+                                        <td>{{col}}</td>
+                                    {%endfor%}
+                                    </tr>
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Kids -->
+            {% if goat_kids %}
+            <div class="kid-counts">
+                <h2>Kids</h2>
+                <!-- Display counts for each sex -->
+                <h3 style="margin-bottom: 5px;">Counts</h3>
+                {%for count in goat_kids_counts%}
+                
+                <div class="count">
+                    {{count[0]}}: {{count[1]}}
+                </div>
+                
+                {%endfor%}
+            </div>
+            <!-- Table of records for each kid -->
+            <div class="stat-table">
+                
+
+                <div>
+                    <div class="stat-table-scroll">
+                        <table>
+                            <!-- column header for loop in jinja template -->
+                            <thead>
+                                <tr>
+                                    <th><span class="text" style="top: -20px;">Tag</span></th>
+                                    <th><span class="text" style="top: -20px;">Sex</span></th>
+                                    <th><span class="text" style="top: -20px;">Status</span></th>
+                                    <th><span class="text" style="top: -20px;">Date of Birth</span></th>
+                                </tr>
+                            </thead>
+                            <!-- nested for loops in jinja template -->
+                            <tbody>
+                            {%for row in goat_kids%}
+                                <tr>
+                                {%for col in row%}
+                                    <td>{{col}}</td>
+                                {%endfor%}
+                                </tr>
+                            {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Notes -->
+            {% if goat_notes %}
+                <!-- Table of notes for this goat -->
+                <div class="stat-table">
+                    <h2>Notes</h2>
+                    <div>
+                        <div class="stat-table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><span class="text">Note</span></th>
+                                        <th><span class="text">Date</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {%for row in goat_notes%}
+                                    <tr>
+                                    {%for col in row%}
+                                        <td>{{col}}</td>
+                                    {%endfor%}
+                                    </tr>
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </body>
+</html>
